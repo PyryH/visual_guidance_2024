@@ -21,10 +21,18 @@ import { levels } from '../imports/levels/levels.js';
 import { levels_2 } from '../imports/levels/levels.js';
 import { questions, questions2 } from '../imports/levels/questions.js';
 //set default nick (this is typically overridden in the router)
+
+// Add timer to the page
+import '../imports/templates/timer.js';
+import '../imports/templates/timer.html';
+
 Session.set('nick', 'mr. bamboo');
 
 //set default heart rate
 Session.set('heart_rate', 1000); //milliseconds
+
+Session.set('switchRoles', false); //Do we run the switch roles between levels
+
 
 //remove the chat box in edit mode
 Template.main_body.helpers({
@@ -35,7 +43,7 @@ Template.main_body.helpers({
 });
 
 
-//here we choose whitch of the level.lists we want to use
+//here we choose which of the level.lists we want to use
 var levels_to_use;
 Tracker.autorun(function() {
   var level_list_choice = Session.get('use_levels'); 
@@ -138,14 +146,14 @@ Tracker.autorun(function() {
   }
 });
 
-
+//We have no heartrate
 //update heart rate
-Tracker.autorun(function() {
-  var heartrate = Heartrates.findOne();
-  if(heartrate !== undefined) {
-    Session.set('heart_rate', heartrate.hr * 1000);
-  }
-})
+//Tracker.autorun(function() {
+//  var heartrate = Heartrates.findOne();
+//  if(heartrate !== undefined) {
+//    Session.set('heart_rate', heartrate.hr * 1000);
+//  }
+//})
 
 
 //update the state of the levels database query based on the current level id
@@ -176,7 +184,7 @@ Tracker.autorun(function() {
 Tracker.autorun(function() {
 
   var count=GridNumber.findOne();
-    if (!Session.get('editMode') && count !== undefined && Session.get('rpp_mode') !== true ){
+    if (Session.get('switchRoles') === true && !Session.get('editMode') && count !== undefined && Session.get('rpp_mode') !== true ){
       var counter = count.count;  //is this even needed? 
       console.log('here we see counter');
       console.log(counter);

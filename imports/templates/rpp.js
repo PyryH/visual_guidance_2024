@@ -105,6 +105,43 @@ Tracker.autorun(function() {
     });
 });
 
+Template.rpp_view.onCreated(function() {
+  this.currentQuestion = new ReactiveVar(0); // Start with the first question
+  this.time = new ReactiveVar(10); // Set the initial countdown time in seconds
+});
+
+Template.rpp_view.onRendered(function() {
+  const instance = this;
+  const interval = setInterval(function() {
+    let currentTime = instance.time.get();
+    if (currentTime > 0) {
+      instance.time.set(currentTime - 1);
+    } else {
+      let currentQuestion = instance.currentQuestion.get();
+      if (currentQuestion < 2) {
+        instance.currentQuestion.set(currentQuestion + 1);
+        instance.time.set(10); // Reset the timer for the next question
+      } else {
+        clearInterval(interval);
+        // Optionally, you can redirect or perform another action here
+      }
+    }
+  }, 1000); // Update every second
+});
+
+Template.rpp_view.helpers({
+  currentQuestion() {
+    return Template.instance().currentQuestion.get();
+  },
+  time() {
+    return Template.instance().time.get();
+  },
+  question() {
+    const currentQuestion = Template.instance().currentQuestion.get();
+    return questions_to_use[currentQuestion];
+  }
+});
+
 Template.rpp_question.helpers({
     'answers': function() {
         updateTimeSync(); // update time sync for every new message

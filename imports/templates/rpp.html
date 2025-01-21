@@ -1,14 +1,15 @@
-
-
 <template name="rpp_view">
+    <div id="timer">
+        <span id="time">{{time}}</span> seconds remaining
+    </div>
+    <div id="question">
+        {{question}}
+    </div>
     <div class="rpp_view">
         <h1>Keskittyk&auml;&auml; yhteen kysymykseen kerrallaan. Tutkija kertoo teille, koska voitte siirty&auml; seuraavaan kysymykseen</h1>
-        <h2>{{questions1}}</h2>
+        <h2>{{question}}</h2>
         {{> rpp_question question="How do you do?" answer=1}}
-        <h2>{{questions2}}</h2>
-        {{> rpp_question question="When did you wake up?" answer=2}}
-        <h2>{{questions3}}</h2>
-        {{> rpp_question question="When did you wake up?" answer=3}}
+
     </div>
 </template>
 
